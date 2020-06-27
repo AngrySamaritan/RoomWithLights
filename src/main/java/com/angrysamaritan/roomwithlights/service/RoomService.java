@@ -15,20 +15,20 @@ public class RoomService {
         this.roomRepo = roomRepo;
     }
 
-    public Room addRoom(String name, Country country) {
+    public void addRoom(String name, Country country) {
         var room = new Room();
         room.setCountry(country);
         room.setName(name);
-        return roomRepo.save(room);
+        roomRepo.save(room);
     }
 
     public Room getRoom(int id) {
         return roomRepo.findById(id).orElseThrow(() -> new RoomNotFoundException(id));
     }
 
-    public void switchLight(int roomId) {
+    public boolean switchLight(int roomId) {
         Room room = getRoom(roomId);
         room.setLightOn(!room.isLightOn());
-        roomRepo.save(room);
+        return roomRepo.save(room).isLightOn();
     }
 }
