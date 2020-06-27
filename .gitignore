@@ -31,10 +31,7 @@ build/
 .vscode/
 
 ### Node ###
-*/node_modules/*
-
-### Spring Boot ###
-*/application.yaml
+/src/main/resources/static/node_modules/
 
 ### Templorary files ###
 *.temp*
