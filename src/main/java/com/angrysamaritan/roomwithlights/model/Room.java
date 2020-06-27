@@ -22,4 +22,8 @@ public class Room {
     @Getter
     @Setter
     private boolean lightOn;
+
+    @Getter
+    @Setter
+    private String name;
 }
