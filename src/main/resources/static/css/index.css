@@ -1,0 +1,11 @@
+.room {
+    height: 100vh;
+}
+
+.room_light_on {
+    background: #c1ae00;
+}
+
+.room_light_off {
+    background: black;
+}
