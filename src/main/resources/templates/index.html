@@ -25,7 +25,7 @@
                 <tr>
                     <th scope="row" th:text="${state.count}"></th>
                     <td th:text="${room.getName()}"></td>
-                    <td th:text="${room.getCountry()}"></td>
+                    <td th:text="${room.getCountry().getName()}"></td>
                     <td><a class="badge badge-primary text-center" style="font-size: 1.15em"
                            th:href="'/room/id' + ${room.getId()}">Enter</a></td>
                 </tr>
