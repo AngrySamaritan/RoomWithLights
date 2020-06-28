@@ -38,10 +38,10 @@ public class RoomController {
     @PostMapping("/room/create")
     public String createRoom(@RequestParam("name") String name, @RequestParam("country_id") int countryId) {
         roomService.addRoom(name, countryService.getCountry(countryId));
-        return null;
+        return "room";
     }
 
-    @PostMapping("room/{id}/switch")
+    @PostMapping("room/id{id}/switch")
     @ResponseBody
     public String switchLight(@PathVariable int id) {
         roomService.switchLight(id);
