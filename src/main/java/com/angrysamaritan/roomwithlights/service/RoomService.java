@@ -6,6 +6,9 @@ import com.angrysamaritan.roomwithlights.model.Room;
 import com.angrysamaritan.roomwithlights.repos.RoomRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class RoomService {
 
@@ -30,5 +33,9 @@ public class RoomService {
         Room room = getRoom(roomId);
         room.setLightOn(!room.isLightOn());
         return roomRepo.save(room).isLightOn();
+    }
+
+    public Iterable<Room> getAllRooms() {
+        return roomRepo.findAll();
     }
 }
