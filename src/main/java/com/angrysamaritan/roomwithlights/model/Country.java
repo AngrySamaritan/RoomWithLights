@@ -18,6 +18,10 @@ public class Country {
     @Setter
     private String code;
 
+    @Getter
+    @Setter
+    private String name;
+
     @OneToMany(mappedBy = "country")
     private List<Room> rooms;
 }

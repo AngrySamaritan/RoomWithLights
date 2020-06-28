@@ -6,6 +6,7 @@ import com.angrysamaritan.roomwithlights.service.HookService;
 import com.angrysamaritan.roomwithlights.service.RoomService;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -22,11 +23,11 @@ public class RoomController {
         this.hookService = hookService;
     }
 
-    @ResponseBody
     @GetMapping("/room/id{id}")
-    public String getRoomInfo(@PathVariable int id) {
+    public String getRoom(@PathVariable int id, Model model) {
         Room room = roomService.getRoom(id);
-        return room.getId() + " : " + room.isLightOn();
+        model.addAttribute("room", room);
+        return "room";
     }
 
     @GetMapping("/room/create")
