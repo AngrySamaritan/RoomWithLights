@@ -2,8 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8" http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8"/>
-    <title>Hello demo</title>
+    <title>Rooms list</title>
 </head>
 <body>
+<div th:include="navbar">
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <p class="display-1">Room List</p>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Enter</th>
+                </tr>
+                </thead>
+                <tbody th:if="${rooms}" th:each="room, state:${rooms}">
+                <tr>
+                    <th scope="row" th:text="${state.count}"></th>
+                    <td th:text="${room.getName()}"></td>
+                    <td th:text="${room.getCountry()}"></td>
+                    <td><a class="badge badge-primary text-center" style="font-size: 1.15em"
+                           th:href="'/room/id' + ${room.getId()}">Enter</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <div th:if="${rooms == null}">
+                <p class="h4 alert-danger text-center">No one room here</p>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

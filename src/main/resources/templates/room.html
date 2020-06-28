@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Room</title>
+    <link href="/css/index.css" rel="stylesheet" type="text/css">
+    <script src="/js/jquery-3.5.1.js"></script>
+    <script src="/js/axios.min.js"></script>
+</head>
+<body>
+<div th:include="navbar">
+</div>
+<div class="container" style="height: 100vh">
+
+    <div th:if="${room.isLightOn()}" class="room room_light_on">
+        <label>
+            <input class="light_info" hidden value="on">
+        </label>
+        <button class="btn-info switch" th:onclick="'switchLight(' + ${room.getId()} + ')'">Switch light off</button>
+    </div>
+    <div th:if="${not room.isLightOn()}" class="room room_light_off">
+        <label>
+            <input class="light_info" hidden value="off">
+        </label>
+        <button class="btn-info switch" th:onclick="'switchLight(' + ${room.getId()} + ')'">Switch light on</button>
+    </div>
+</div>
+<script src="/js/room.js"></script>
+</body>
+</html>
