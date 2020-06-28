@@ -2,7 +2,7 @@ package com.angrysamaritan.roomwithlights.control;
 
 import com.angrysamaritan.roomwithlights.model.Room;
 import com.angrysamaritan.roomwithlights.service.CountryService;
-import com.angrysamaritan.roomwithlights.service.HookService;
+import com.angrysamaritan.roomwithlights.service.LongPollService;
 import com.angrysamaritan.roomwithlights.service.RoomService;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
@@ -15,12 +15,12 @@ public class RoomController {
     private static final int CHECK_DELAY = 100;
     private final RoomService roomService;
     private final CountryService countryService;
-    private final HookService hookService;
+    private final LongPollService longPollService;
 
-    public RoomController(RoomService roomService, CountryService countryService, HookService hookService) {
+    public RoomController(RoomService roomService, CountryService countryService, LongPollService longPollService) {
         this.roomService = roomService;
         this.countryService = countryService;
-        this.hookService = hookService;
+        this.longPollService = longPollService;
     }
 
     @GetMapping("/room/id{id}")
@@ -49,21 +49,21 @@ public class RoomController {
     }
 
     @ResponseBody
-    @GetMapping("/room/hook")
+    @GetMapping("/room/long_poll")
     public String lightWebHook(@RequestParam("id") int id, @RequestParam("last_state") boolean lastState,
                                @RequestParam("time") int time) throws InterruptedException, NotFoundException {
         boolean currentState;
         Room room = roomService.getRoom(id);
         boolean hasChanged;
         if (lastState == room.isLightOn()) {
-            hasChanged = hookService.wait(room, time, lastState, CHECK_DELAY);
+            hasChanged = longPollService.wait(room, time, lastState, CHECK_DELAY);
             if (hasChanged) {
                 currentState = !lastState;
             } else {
                 currentState = lastState;
             }
         } else {
-            currentState = !room.isLightOn();
+            currentState = room.isLightOn();
         }
         return String.valueOf(currentState);
     }

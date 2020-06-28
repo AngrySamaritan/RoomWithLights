@@ -2,11 +2,13 @@ package com.angrysamaritan.roomwithlights.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Synchronize;
 
 import javax.persistence.*;
 
 @Entity
-public class HookInfo {
+@Synchronize({"id", "request_amount", "prev_state", "room_id"})
+public class LongPollInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
