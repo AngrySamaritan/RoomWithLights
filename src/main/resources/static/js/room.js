@@ -9,7 +9,6 @@ $(document).ready(
         state = $(".light_info").attr("value") === "on";
         roomId = $("#room_id").attr("value");
         lock = true;
-        console.log(lock)
     }
 )
 
@@ -18,26 +17,33 @@ setInterval(() => switchLightLongPoll());
 function switchLightLongPoll() {
     if (lock) {
         lock = false;
-        axios.get(HOST + "/room/long_poll?id=" + roomId + "&last_state=" + state + "&time=" + TIME_MILLISECONDS).then(
-            (response) => {
+        $.ajax({
+            url: "/room/long_poll?id=" + roomId + "&last_state=" + state + "&time=" + TIME_MILLISECONDS,
+            success: (response) => {
                 if (response.data !== state) {
                     changeToAnother();
                 }
-            }
-        ).finally(() => {
-            lock = true
+            },
+            complete: () => {lock = true;},
         });
     }
 }
 
 function switchLight() {
-    axios.post(HOST + "/room/id" + roomId + "/switch").then(
-        (response) => {
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    let headers = {};
+    headers[header] = token;
+    $.ajax({
+        url: HOST + "/room/id" + roomId + "/switch",
+        headers: headers,
+        method: "post",
+        success: (response) => {
             if (response.status === 200) {
                 changeToAnother();
             }
         }
-    );
+    });
 }
 
 function changeToAnother() {

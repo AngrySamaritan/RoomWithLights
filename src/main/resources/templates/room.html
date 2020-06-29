@@ -2,9 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title th:text="${room.getName()}"></title>
     <link href="/css/index.css" rel="stylesheet" type="text/css">
-    <script src="/js/axios.min.js"></script>
 </head>
 <body>
 <div th:include="navbar">
@@ -13,8 +14,6 @@
 <label>
     <input id="room_id" hidden th:value="${room.getId()}">
 </label>
-
-<h1>[[${#response.getHeader('host')}]]</h1>
 
 <div class="container" style="height: 80vh">
     <div th:if="${room.isLightOn()}" class="room room_light_on">
