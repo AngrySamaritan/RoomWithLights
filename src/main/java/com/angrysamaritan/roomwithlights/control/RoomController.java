@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
@@ -26,15 +27,32 @@ public class RoomController {
     }
 
     @GetMapping("/room/id{id}")
-    public String getRoom(@PathVariable int id, Model model, HttpServletRequest request) {
+    public String getRoom(@PathVariable int id, Model model, HttpServletRequest request,
+                          RedirectAttributes redirectAttributes) {
         Room room = roomService.getRoom(id);
-        String ip = request.getRemoteAddr();
+        String ip = request.getHeader("X-FORWARDED-FOR");
+        if (ip == null) {
+            ip = request.getRemoteAddr();
+        }
         if (countryService.checkCountryAccess(room.getCountry(), ip)) {
             model.addAttribute("room", room);
             return "room";
         } else {
-            return "redirect:/country_access_error";
+            redirectAttributes.addAttribute("access_error", true);
+            return "redirect:/room_list";
         }
+    }
+
+    @GetMapping("/")
+    public String getIndex() {
+        return "redirect:/room_list";
+    }
+
+    @GetMapping("/room_list")
+    public String getMain(@RequestParam(value = "access_error", required = false) boolean error, Model model) {
+        model.addAttribute("access_error", error);
+        model.addAttribute("rooms", roomService.getAllRooms());
+        return "index";
     }
 
     @GetMapping("/room/create")
@@ -45,7 +63,7 @@ public class RoomController {
 
     @PostMapping("/room/create")
     public String createRoom(@RequestParam("name") String name, @RequestParam("country_id") int countryId,
-                             @RequestParam(value = "is_light_on", required = false) boolean isLightOn, Model model) {
+                             @RequestParam(value = "is_light_on", required = false) boolean isLightOn) {
         int id = roomService.addRoom(name, countryService.getCountry(countryId), isLightOn).getId();
         return "redirect:/room/id" + id;
     }
