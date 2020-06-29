@@ -21,8 +21,8 @@
                     <th scope="col">Enter</th>
                 </tr>
                 </thead>
-                <tbody th:if="${rooms}" th:each="room, state:${rooms}">
-                <tr>
+                <tbody th:if="${rooms}">
+                <tr th:each="room, state:${rooms}">
                     <th scope="row" th:text="${state.count}"></th>
                     <td th:text="${room.getName()}"></td>
                     <td th:text="${room.getCountry().getName()}"></td>

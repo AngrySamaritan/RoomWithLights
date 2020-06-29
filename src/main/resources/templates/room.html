@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Room</title>
+    <title th:text="${room.getName()}"></title>
     <link href="/css/index.css" rel="stylesheet" type="text/css">
     <script src="/js/jquery-3.5.1.js"></script>
     <script src="/js/axios.min.js"></script>
@@ -15,7 +15,7 @@
     <input id="room_id" hidden th:value="${room.getId()}">
 </label>
 
-<div class="container" style="height: 100vh">
+<div class="container" style="height: 80vh">
     <div th:if="${room.isLightOn()}" class="room room_light_on">
         <label>
             <input class="light_info" hidden value="on">
@@ -29,7 +29,6 @@
         <button class="btn-info switch" onclick="switchLight()">Switch light on</button>
     </div>
 </div>
-<button class="btn-primary" onclick="switchLightLongPoll()">Test</button>
 <script src="/js/room.js"></script>
 </body>
 </html>
