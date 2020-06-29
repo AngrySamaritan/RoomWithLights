@@ -1,4 +1,4 @@
-const HOST = "http://localhost:8081";
+const HOST = "http://localhost:8080";
 const TIME_MILLISECONDS = 10000;
 let state;
 let roomId;
