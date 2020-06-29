@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -18,16 +19,22 @@ public class RoomController {
     private final RoomService roomService;
     private final CountryService countryService;
 
+
     public RoomController(RoomService roomService, CountryService countryService) {
         this.roomService = roomService;
         this.countryService = countryService;
     }
 
     @GetMapping("/room/id{id}")
-    public String getRoom(@PathVariable int id, Model model) {
+    public String getRoom(@PathVariable int id, Model model, HttpServletRequest request) {
         Room room = roomService.getRoom(id);
-        model.addAttribute("room", room);
-        return "room";
+        String ip = request.getRemoteAddr();
+        if (countryService.checkCountryAccess(room.getCountry(), ip)) {
+            model.addAttribute("room", room);
+            return "room";
+        } else {
+            return "redirect:/country_access_error";
+        }
     }
 
     @GetMapping("/room/create")
