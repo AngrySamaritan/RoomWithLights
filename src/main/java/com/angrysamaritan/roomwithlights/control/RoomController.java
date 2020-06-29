@@ -2,25 +2,25 @@ package com.angrysamaritan.roomwithlights.control;
 
 import com.angrysamaritan.roomwithlights.model.Room;
 import com.angrysamaritan.roomwithlights.service.CountryService;
-import com.angrysamaritan.roomwithlights.service.LongPollService;
 import com.angrysamaritan.roomwithlights.service.RoomService;
-import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class RoomController {
 
-    private static final int CHECK_DELAY = 100;
+    public static int DB_REQUEST_INTERVAL = 100;
     private final RoomService roomService;
     private final CountryService countryService;
-    private final LongPollService longPollService;
 
-    public RoomController(RoomService roomService, CountryService countryService, LongPollService longPollService) {
+    public RoomController(RoomService roomService, CountryService countryService) {
         this.roomService = roomService;
         this.countryService = countryService;
-        this.longPollService = longPollService;
     }
 
     @GetMapping("/room/id{id}")
@@ -50,21 +50,24 @@ public class RoomController {
 
     @ResponseBody
     @GetMapping("/room/long_poll")
-    public String lightWebHook(@RequestParam("id") int id, @RequestParam("last_state") boolean lastState,
-                               @RequestParam("time") int time) throws InterruptedException, NotFoundException {
-        boolean currentState;
-        Room room = roomService.getRoom(id);
-        boolean hasChanged;
-        if (lastState == room.isLightOn()) {
-            hasChanged = longPollService.wait(room, time, lastState, CHECK_DELAY);
-            if (hasChanged) {
-                currentState = !lastState;
-            } else {
-                currentState = lastState;
-            }
-        } else {
-            currentState = room.isLightOn();
-        }
-        return String.valueOf(currentState);
+    public DeferredResult<String> lightWebHook(@RequestParam("id") int id, @RequestParam("last_state") boolean lastState,
+                                               @RequestParam("time") int time) {
+        DeferredResult<String> deferredResult = new DeferredResult<>();
+        CompletableFuture.runAsync(
+                () -> {
+                    try {
+                        var room = roomService.getRoom(id);
+                        int timeGone = 0;
+                        while (room.isLightOn() == lastState && timeGone < time) {
+                            TimeUnit.MILLISECONDS.sleep(DB_REQUEST_INTERVAL);
+                            timeGone += DB_REQUEST_INTERVAL;
+                            room = roomService.getRoom(id);
+                        }
+                        deferredResult.setResult(String.valueOf(room.isLightOn()));
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+        );
+        return deferredResult;
     }
 }
