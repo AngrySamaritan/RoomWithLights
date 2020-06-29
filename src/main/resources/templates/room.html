@@ -14,6 +14,8 @@
     <input id="room_id" hidden th:value="${room.getId()}">
 </label>
 
+<h1>[[${#response.getHeader('host')}]]</h1>
+
 <div class="container" style="height: 80vh">
     <div th:if="${room.isLightOn()}" class="room room_light_on">
         <label>
@@ -28,6 +30,8 @@
         <button class="btn-info switch" onclick="switchLight()">Switch light on</button>
     </div>
 </div>
-<script src="/js/room.js"></script>
+<script th:inline="javascript" src="/js/room.js">
+
+</script>
 </body>
 </html>

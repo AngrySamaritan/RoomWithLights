@@ -1,4 +1,4 @@
-const HOST = "http://localhost:8080";
+const HOST = "http://" + window.location.host;
 const TIME_MILLISECONDS = 10000;
 let state;
 let roomId;
@@ -16,7 +16,6 @@ $(document).ready(
 setInterval(() => switchLightLongPoll());
 
 function switchLightLongPoll() {
-    console.log("All right");
     if (lock) {
         lock = false;
         axios.get(HOST + "/room/long_poll?id=" + roomId + "&last_state=" + state + "&time=" + TIME_MILLISECONDS).then(
