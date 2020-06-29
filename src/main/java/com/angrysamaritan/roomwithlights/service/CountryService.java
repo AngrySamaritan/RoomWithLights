@@ -14,6 +14,10 @@ public class CountryService {
         this.countryRepo = countryRepo;
     }
 
+    public Iterable<Country> getAllCountries() {
+        return countryRepo.findAll();
+    }
+
     public Country getCountry(int id) {
         return countryRepo.findById(id).orElseThrow(() -> new CountryNotFoundException(id));
     }

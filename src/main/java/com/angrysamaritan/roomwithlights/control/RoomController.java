@@ -31,21 +31,22 @@ public class RoomController {
     }
 
     @GetMapping("/room/create")
-    public String getRoomCreatePage() {
-        return null;
+    public String getRoomCreatePage(Model model) {
+        model.addAttribute("countries", countryService.getAllCountries());
+        return "create_room";
     }
 
     @PostMapping("/room/create")
-    public String createRoom(@RequestParam("name") String name, @RequestParam("country_id") int countryId) {
-        roomService.addRoom(name, countryService.getCountry(countryId));
-        return "room";
+    public String createRoom(@RequestParam("name") String name, @RequestParam("country_id") int countryId,
+                             @RequestParam(value = "is_light_on", required = false) boolean isLightOn, Model model) {
+        int id = roomService.addRoom(name, countryService.getCountry(countryId), isLightOn).getId();
+        return "redirect:/room/id" + id;
     }
 
     @PostMapping("room/id{id}/switch")
     @ResponseBody
     public String switchLight(@PathVariable int id) {
-        roomService.switchLight(id);
-        return "All right";
+        return String.valueOf(roomService.switchLight(id));
     }
 
     @ResponseBody
