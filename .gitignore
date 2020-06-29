@@ -35,3 +35,6 @@ build/
 
 ### Templorary files ###
 *.temp*
+
+### Spring Config ###
+/src/main/resources/application.yaml

@@ -1,0 +1,24 @@
+
+
+spring:
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:mysql://rooms-with-lamps.cn1jus0zhttg.us-east-2.rds.amazonaws.com:3306/RoomWithLamps
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: admin
+    password: brain404
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+side-api:
+  check-ip-url: http://www.geoplugin.net/json.gp?ip=%s
+server:
+  port: 5000
