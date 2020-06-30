@@ -38,3 +38,4 @@ build/
 
 ### Spring Config ###
 /src/main/resources/application.yaml
+/src/main/resources/application-dev.yaml
