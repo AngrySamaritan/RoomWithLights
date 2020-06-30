@@ -20,7 +20,7 @@ function switchLightLongPoll() {
         $.ajax({
             url: "/room/long_poll?id=" + roomId + "&last_state=" + state + "&time=" + TIME_MILLISECONDS,
             success: (response) => {
-                if (response.data !== state) {
+                if (response.data !== state.toString()) {
                     changeToAnother();
                 }
             },
