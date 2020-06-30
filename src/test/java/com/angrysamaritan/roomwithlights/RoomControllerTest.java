@@ -66,7 +66,7 @@ public class RoomControllerTest {
         Room room = roomService.getRoom(1);
 
         MvcResult result = mockMvc.perform(get("/room/long_poll").param("id", String.valueOf(room.getId()))
-                .param("time", "1000")
+                .param("time", "5000")
                 .param("last_state", String.valueOf(room.isLightOn()))).andReturn();
 
         mockMvc

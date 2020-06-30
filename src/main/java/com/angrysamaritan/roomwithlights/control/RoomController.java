@@ -10,13 +10,15 @@ import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @Controller
 public class RoomController {
 
-    public static int DB_REQUEST_INTERVAL = 100;
+    public static int DB_REQUEST_INTERVAL = 500;
     private final RoomService roomService;
     private final CountryService countryService;
 
@@ -83,14 +85,14 @@ public class RoomController {
                 () -> {
                     try {
                         var room = roomService.getRoom(id);
-                        int timeGone = 0;
-                        while (room.isLightOn() == lastState && timeGone < time) {
+                        LocalDateTime endTime = LocalDateTime.now().plusNanos(time * 1000);
+                        while (room.isLightOn() == lastState &&  LocalDateTime.now().isBefore(endTime)) {
                             TimeUnit.MILLISECONDS.sleep(DB_REQUEST_INTERVAL);
-                            timeGone += DB_REQUEST_INTERVAL;
                             room = roomService.getRoom(id);
                         }
                         deferredResult.setResult(String.valueOf(room.isLightOn()));
-                    } catch (InterruptedException ignored) {
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
         );
