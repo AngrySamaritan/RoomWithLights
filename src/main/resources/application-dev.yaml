@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: jdbc:mysql://rooms-with-lamps.cn1jus0zhttg.us-east-2.rds.amazonaws.com:3306/testDb
