@@ -3,7 +3,7 @@ package com.angrysamaritan.roomwithlights;
 import com.angrysamaritan.roomwithlights.control.RoomController;
 import com.angrysamaritan.roomwithlights.model.Room;
 import com.angrysamaritan.roomwithlights.service.RoomService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -66,7 +66,7 @@ public class RoomControllerTest {
         Room room = roomService.getRoom(1);
 
         MvcResult result = mockMvc.perform(get("/room/long_poll").param("id", String.valueOf(room.getId()))
-                .param("time", "5000")
+                .param("time", "1000")
                 .param("last_state", String.valueOf(room.isLightOn()))).andReturn();
 
         mockMvc
