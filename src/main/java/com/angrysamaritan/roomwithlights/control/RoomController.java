@@ -85,7 +85,7 @@ public class RoomController {
                 () -> {
                     try {
                         var room = roomService.getRoom(id);
-                        LocalDateTime endTime = LocalDateTime.now().plusNanos(time * 1000);
+                        LocalDateTime endTime = LocalDateTime.now().plusSeconds(time);
                         while (room.isLightOn() == lastState &&  LocalDateTime.now().isBefore(endTime)) {
                             TimeUnit.MILLISECONDS.sleep(DB_REQUEST_INTERVAL);
                             room = roomService.getRoom(id);

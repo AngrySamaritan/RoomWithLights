@@ -39,12 +39,12 @@ public class RoomControllerTest {
         Room room = roomService.getRoom(1);
 
         MvcResult result = mockMvc.perform(get("/room/long_poll").param("id", String.valueOf(room.getId()))
-                .param("time", "5000")
+                .param("time", "5")
                 .param("last_state", String.valueOf(room.isLightOn()))).andReturn();
 
         new Thread(() -> {
             try {
-                Thread.sleep(new Random().nextInt(4000) + 500);
+                Thread.sleep(new Random().nextInt(3000) + 500);
                 mockMvc.perform(post("/room/id1/switch").with(csrf()));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -66,7 +66,7 @@ public class RoomControllerTest {
         Room room = roomService.getRoom(1);
 
         MvcResult result = mockMvc.perform(get("/room/long_poll").param("id", String.valueOf(room.getId()))
-                .param("time", "5000")
+                .param("time", "5")
                 .param("last_state", String.valueOf(room.isLightOn()))).andReturn();
 
         mockMvc

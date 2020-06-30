@@ -1,5 +1,5 @@
 const HOST = "http://" + window.location.host;
-const TIME_MILLISECONDS = 10000;
+const TIME_SECONDS = 10;
 let state;
 let roomId;
 let lock = false;
@@ -18,7 +18,7 @@ function switchLightLongPoll() {
     if (lock) {
         lock = false;
         $.ajax({
-            url: "/room/long_poll?id=" + roomId + "&last_state=" + state + "&time=" + TIME_MILLISECONDS,
+            url: "/room/long_poll?id=" + roomId + "&last_state=" + state + "&time=" + TIME_SECONDS,
             success: (response) => {
                 if (response !== state.toString()) {
                     changeToAnother();
